@@ -2,15 +2,8 @@ import React, { Component } from "react";
 
 export class NewsItem extends Component {
   render() {
-    let { 
-      title, 
-      description, 
-      imageUrl, 
-      newsUrl, 
-      date, 
-      author, 
-      source 
-    } = this.props;
+    let { title, description, imageUrl, newsUrl, date, author, source } =
+      this.props;
 
     // Handle potentially undefined or null values
     const safeAuthor = author || "Unknown Author";
@@ -31,33 +24,30 @@ export class NewsItem extends Component {
               className="card-img-top"
               alt="News Article"
             />
-            <span 
-              className="position-absolute top-0 end-0 badge rounded-pill bg-danger" 
-              style={{ zIndex: 1, margin: '10px' }}
+            <span
+              className="position-absolute top-0 end-0 badge rounded-pill bg-danger"
+              style={{ zIndex: 1, margin: "10px" }}
             >
               {safeSource}
             </span>
           </div>
-          
+
           <div className="card-body d-flex flex-column">
-            <h5 className="card-title">
-              {safeTitle}
-            </h5>
-            
-            <p className="card-text flex-grow-1">
-              {safeDescription}
-            </p>
-            
+            <h5 className="card-title">{safeTitle}</h5>
+
+            <p className="card-text flex-grow-1">{safeDescription}</p>
+
             <div className="d-flex justify-content-between align-items-center mt-3">
               <small className="text-muted">
                 <span className="me-2">
                   <i className="bi bi-person-fill"></i> {safeAuthor}
                 </span>
                 <span>
-                  <i className="bi bi-calendar-fill"></i> {new Date(date).toLocaleDateString()}
+                  <i className="bi bi-calendar-fill"></i>{" "}
+                  {new Date(date).toLocaleDateString()}
                 </span>
               </small>
-              
+
               <a
                 href={newsUrl}
                 target="_blank"
