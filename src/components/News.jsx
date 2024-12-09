@@ -15,6 +15,7 @@ export class News extends Component {
     country: PropTypes.string,
     pageSize: PropTypes.number,
     category: PropTypes.string,
+    setProgress: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -36,6 +37,7 @@ export class News extends Component {
   };
 
   fetchMoreData = async () => {
+    this.props.setProgress(10);
     try {
       const nextPage = this.state.page + 1;
       
@@ -47,8 +49,9 @@ export class News extends Component {
       this.setState({ loading: true });
       
       let data = await fetch(url);
+      this.props.setProgress(30);
       let parsedData = await data.json();
-
+      this.props.setProgress(70);
       // Check if articles exist and is an array
       if (parsedData.articles && Array.isArray(parsedData.articles)) {
         // Filter out duplicate articles
@@ -80,6 +83,7 @@ export class News extends Component {
 
   async componentDidMount() {
     await this.fetchInitialNews();
+    this.props.setProgress(100);
   }
 
   fetchInitialNews = async () => {
