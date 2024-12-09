@@ -67,17 +67,20 @@ export class News extends Component {
           totalResults: parsedData.totalResults || prevState.totalResults,
           loading: false,
         }));
+        this.props.setProgress(100);
       } else {
         this.setState({
           loading: false,
           error: "No more articles found",
         });
+        this.props.setProgress(100);
       }
     } catch (error) {
       this.setState({
         loading: false,
         error: "Error fetching more news",
       });
+      this.props.setProgress(100);
     }
   };
 
@@ -87,75 +90,55 @@ export class News extends Component {
   }
 
   fetchInitialNews = async () => {
+    this.props.setProgress(10);
     try {
       let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=1e000c49d1bc4f30a18f610b7b3bc900&page=1&pageSize=${this.props.pageSize}`;
       
       this.setState({ loading: true });
       
       let data = await fetch(url);
+      this.props.setProgress(30);
       let parsedData = await data.json();
-
-      if (parsedData.articles && Array.isArray(parsedData.articles)) {
-        this.setState({
-          articles: parsedData.articles,
-          totalResults: parsedData.totalResults || 0,
-          loading: false,
-        });
-      } else {
-        this.setState({
-          articles: [],
-          error: "No articles found",
-          loading: false,
-        });
-      }
-    } catch (error) {
+      this.props.setProgress(70);
       this.setState({
-        articles: [],
-        error: "Error fetching initial news",
+        articles: parsedData.articles,
+        totalResults: parsedData.totalResults,
         loading: false,
       });
+      this.props.setProgress(100);
+    } catch (error) {
+      this.setState({
+        loading: false,
+        error: "Error fetching initial news",
+      });
+      this.props.setProgress(100);
     }
   };
 
   render() {
-    // Error handling
-    if (this.state.error) {
-      return (
-        <div className="container my-3 text-center">
-          Error: {this.state.error}
-        </div>
-      );
-    }
-
     return (
       <div className="container my-3">
-        <h1 className="text-center" style={{ margin: "40px 35px" }}>
-          NewsMonkey - Top {this.capitalizeFirstLetter(this.props.category)}{" "}
-          Headlines
-        </h1>
+        <h1 className="text-center" style={{ margin: "40px 35px" }}>NewsMonkey Top Headlines</h1>
         {this.state.loading && <Spinner />}
         <InfiniteScroll
           dataLength={this.state.articles.length}
           next={this.fetchMoreData}
-          hasMore={this.state.articles.length < this.state.totalResults}
+          hasMore={this.state.articles.length !== this.state.totalResults}
           loader={<Spinner />}
         >
-          <div className="container">
           <div className="row">
-            {this.state.articles.map((element, index) => (
-              <div className="col-md-4" key={`${element.url}-${index}`}>
-                <NewsItem
-                  title={element.title || ""}
-                  description={element.description || ""}
-                  imageUrl={element.urlToImage}
-                  newsUrl={element.url}
-                  author={element.author || "Unknown"}
-                  date={element.publishedAt}
-                  source={element.source.name}
-                />
-              </div>
-            ))}
-          </div>
+            {this.state.articles.map((element, index) => {
+              return (
+                <div className="col-md-4" key={element.url + index}>
+                  <NewsItem
+                    title={element.title ? element.title : ""}
+                    description={element.description ? element.description : ""}
+                    imageUrl={element.urlToImage}
+                    newsUrl={element.url}
+                  />
+                </div>
+              );
+            })}
           </div>
         </InfiniteScroll>
       </div>
