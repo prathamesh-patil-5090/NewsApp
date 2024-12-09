@@ -41,7 +41,7 @@ export class News extends Component {
     try {
       const nextPage = this.state.page + 1;
       
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=1e000c49d1bc4f30a18f610b7b3bc900&page=${nextPage}&pageSize=${this.props.pageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pageSize=${this.props.pageSize}`;
       
       // Prevent multiple simultaneous fetches
       if (this.state.loading) return;
@@ -92,7 +92,7 @@ export class News extends Component {
   fetchInitialNews = async () => {
     this.props.setProgress(10);
     try {
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=1e000c49d1bc4f30a18f610b7b3bc900&page=1&pageSize=${this.props.pageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pageSize=${this.props.pageSize}`;
       
       this.setState({ loading: true });
       
