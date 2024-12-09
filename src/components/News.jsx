@@ -41,7 +41,7 @@ export class News extends Component {
     try {
       const nextPage = this.state.page + 1;
       
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pageSize=${this.props.pageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${nextPage}&pageSize=${this.props.pageSize}`;
       
       // Prevent multiple simultaneous fetches
       if (this.state.loading) return;
@@ -126,7 +126,7 @@ export class News extends Component {
           hasMore={this.state.articles.length !== this.state.totalResults}
           loader={<Spinner />}
         >
-          <div className="row">
+          <div className="container row">
             {this.state.articles.map((element, index) => {
               return (
                 <div className="col-md-4" key={element.url + index}>
@@ -135,6 +135,9 @@ export class News extends Component {
                     description={element.description ? element.description : ""}
                     imageUrl={element.urlToImage}
                     newsUrl={element.url}
+                    author={element.author}
+                    date={element.publishedAt}
+                    source={element.source.name}
                   />
                 </div>
               );

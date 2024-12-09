@@ -2,8 +2,7 @@ import React, { Component } from "react";
 
 export class NewsItem extends Component {
   render() {
-    let { title, description, imageUrl, newsUrl, date, author, source } =
-      this.props;
+    let { title, description, imageUrl, newsUrl, date, author, source } = this.props;
 
     // Handle potentially undefined or null values
     const safeAuthor = author || "Unknown Author";
